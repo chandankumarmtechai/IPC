@@ -1,0 +1,105 @@
+Synchronization
+*************************************
+Synchronization is needed to avoid race condition. Race condition occurs in multiprocessing environment where multiple
+processes compete for CPU and any other resources i.e. file, code section. 
+Code area that contains instructions causes race condition is called critical section.
+If critical section is made atomic, there is no need for synchronization technique. Any synchronization technique provided 
+by Opearting System needs atomicity atlast. You can not imagine any snchronization technique without atomicity.
+
+Types of snchronization
+*****************************************************
+1) Busy waiting - Lock, TSL, Turn variable, interseted variable, Peterson solution
+2) Sleep and wakeup - Semaphore, counting semaphore, binary semaphore
+Other possible categorisation
+1) Software solution - Lock, Turn variable, interested variable, Peterson solution
+2) Hardware solution (OS) - TSL, Semaphore
+
+Synchronization technique provided by OS
+1) spin lock
+2) mutex
+3) condition variable
+4) semaphore
+
+
+All the busy waiting solution suffers from priority of inversion problem.
+Some popular synchronization problems are -----
+1) Producer consumer
+2) Reader writer
+3) Record locking
+4) Barrier 
+
+In synchronization processes are involved to compete for resources. A process has to wait for a resource if other any
+process have occupied the resource. There may be any number of processes , any number of resources involved. Can 
+we make a mathematical model of this problem? Can State transition diagram (Automata) be helpful in this?
+
+Interprocess communication
+******************************************************
+Processes have relations like parent child called related processes otherwise they are unrelated.
+If processes are co operating among them either by means of synchronization or IPC are called co operating processes.
+
+Popular IPC mechanism are ------------
+1) Pipe - It is anonymous(without name). That`s why it is used among related processes only. It is half duplex.
+2) FIFO - It has a name. Can be used among unrelated processes also. It is also half duplex.
+3) Message queue - It can be think as linked list of message. A process can read or write message to queue. A reader
+process need not to wait for a writer process to be arrive at the queue, and vice versa as in the case of Pipe and FIFO. 
+4) Shared memory - A memory region is made common for adress spaces of process. This common memory region is
+shared among process to exchange information.
+
+Pipe and FIFO uses stream IO to create IPC channel. A stream can be think as continous supply of bytes. 
+Sometimes an application wants to impose some structure on the data being transferred. This can happen when the data
+consists of variable-length messages and the reader must know where the message boundaries are so that 
+it knows when a single message has been read.
+
+Pipe, FIFO and files are synchronized by kernel in uinx.
+Message queue can be also synchronized by kernel, provides some methods to be used by user to synchronize.
+There is need for explicit synchronization in shared memory.
+
+Let`s think of multiprocessing and multithreading
+******************************************************************************************
+A process is a program brought in memory to run. A set memory address is assigned to a process called address space.
+A process control block contains metadata about a process. A process has it`s own address space, file descriptor table, 
+program counter. An existing process can create new processes. A newly created process can execute a program.
+Process control primitives in unix are--
+1) fork
+2) exec
+3) wait, waitid, sleep, signal
+4) Exit, exit
+
+A thread is a child process that always runs in its immediate parent`s address space.  A process can create multiple
+threads and each thread execute a diffrerent program in the same address space. When a process terminates its all
+threads all terminated. If a thread of a process calls exit the entire process will exit. All threads run in one address
+space , if they are sharing a global variable then there is need for explicit synchronization among them.  A thread
+has its own program counter, stack.
+
+Now we can think about multiprocessing--
+Multiprocessing is about let`s multiple processes run concurrently by competing for CPU. A CPU scheduler is responsible
+for assigning and taking CPU to and from a process. If all the processes are unrelated and non coordinating then
+there is no need for IPC and synchronization. If processes are communicating then there is a need for IPC.
+It depends on the nature of interaction of processes, whether synchronization is needed or not. A simple form of 
+multiprocessing is running multiple copy of a program in one CPU.
+
+Caution: Concureent, simultanous, parallel, distributed are loosly used in the most text, make a clear diffrence.
+
+Let`s think about synchronous model and asynchronous model of programming---
+In synchronous model of programming each intructuon runs after completion of its previous intruction.
+In asynchronous model there is no gaurantee of completyion of previous instruction. Signal can be used in this
+model to tell about completion.
+
+Let`s think about multithreading--
+Multithreading can be think as separating synchronous, asynchronous and independant task of the pragram. 
+Let assign each asynchronous part a new thread, each independant task a new thread. 
+
+A typical UNIX process can be thought of as having a single thread of control: each process is doing 
+only one thing at a time. With multiple threads of control, we can design our programs to do more than 
+one thing at a time within a single process, with each thread handling a separate task.
+
+A thread runs a different part of program assigned to it.
+Two tasks can be interleaved only if they don’t depend on the processing performed by each other. 
+
+Similarly, interactive programs can realize improved response time by using multiple threads to separate 
+the portions of the program that deal with user input and output from the other parts of the program.
+
+Intercommunication among threads are easy beacuse they are in the same address space.
+
+How to design our program multithreaded?
+
